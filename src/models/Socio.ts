@@ -17,6 +17,9 @@ const SocioSchema = new Schema({
   initDate: {
     type: Date,
     default: Date.now
+  },
+  qr: {
+    type: String
   }
 });
 

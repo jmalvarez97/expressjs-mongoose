@@ -16,12 +16,9 @@ routes.get("/", async (req, res) => {
 
 routes.post("/", async (req, res) => {
   try {
-    const socio  = req.body;
-    const newSocio = await SocioModel.create(socio);
-    const newQr = await QRModel.create({
-                                          "idSocio" : newSocio._id,
-                                          "img" : await QRCode.toDataURL("expressjs-mongoose-production-14de.up.railway.app/socios/payments/"+ newSocio._id.toString())
-    }) 
+    const newSocio = await SocioModel.create(req.body);
+    newSocio["qr"] = await QRCode.toDataURL(newSocio._id.toString())
+    await SocioModel.findOneAndUpdate({_id: newSocio._id}, {$set:newSocio})
     return res.status(201).json(newSocio);
   } catch (error) {
     console.error(error);
